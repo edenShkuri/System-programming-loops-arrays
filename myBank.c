@@ -2,154 +2,191 @@
 #define size 50
 double acc[2][size]={0};
 
-double getAmount()
-{
-double amount;
-printf("enter amount \n");
-if((scanf(" %lf", &amount)==0))
-    return -1;
-else return amount; 
-}
-
-int getAccountNum()
-{
-int account;
-printf("enter account number \n");
-if((scanf(" %d", &account))==0)
-   {
-     printf("invalid acount number \n");
-     return -1;
-   }
-if (account<901 ||account>950)
-{
-  printf("invalid acount number \n");
-  return -1;
-}
-else return account;
-}
-
 void openAccount()
 {
- double amount=getAmount();
- if(amount<0)
- {
-  printf("invalid number \n");
-  return;
- }
- for(int i=0; i<size; i++)
- {
-  if(acc[1][i]==0)
+ double amount;
+  printf("Please enter amount for deposit: ");
+  if(scanf(" %lf", &amount)==0)
+   {
+    printf("Failed to read the amount\n");
+    return;
+   }
+  if(amount<0)
+   {
+    printf("Invalid Amount\n");
+    return;
+   }
+  for(int i=0; i<size; i++)
   {
+    if(acc[1][i]==0)
+    {
       acc[0][i]=amount;
       acc[1][i]=1.0;
-      printf("account number: %d\n", 901+i);
+      printf("New account number is: %d\n", 901+i);
       return;
+    }
   }
- }
- printf("there is no available account\n"); 
+  printf("there is no available account\n"); 
 }
 
 void checkBalance()
 {
- int accountNum=getAccountNum();
- if(accountNum<0)
+ int account;
+ printf("Please enter account number: ");
+ if((scanf(" %d", &account))==0)
+ {
+  printf("Failed to read the account number\n");
   return;
- if(acc[1][accountNum-901]==1)
-    printf("the balance for this account: %0.2lf\n", acc[0][accountNum-901]);
- else
- printf("this account is close\n"); 
+ }
+ if (account<901 ||account>950) 
+ {
+  printf("invalid acount number \n");
+  return;
+ }
+ if(acc[1][account-901]==0)
+ {
+  printf("This account is closed\n"); 
+  return;
+ }
+  printf("The balance of account number %d is: %0.2lf\n",account, acc[0][account-901]);
 }
 
 void deposit()
 {
- int accountNum=getAccountNum();
- double amount=getAmount();
- if(amount<0)
- {
-  printf("invalid number \n");
+int account;
+printf("Please enter account number: ");
+if((scanf(" %d", &account))==0)
+   {
+     printf("Failed to read the account number\n");
+     return;
+   }
+if (account<901 ||account>950)
+{
+  printf("invalid acount number \n");
   return;
- }
- if(accountNum<0)
+}
+if(acc[1][account-901]==0)
+{
+printf("This account is closed\n");
+return;
+}
+ double amount;
+printf("Please enter amount for deposit: ");
+if((scanf(" %lf", &amount)==0))
+   {
+     printf("Failed to read the amount\n");
+     return;
+   }
+if(amount<0)
+{
+  printf("Cannot deposit a negative amount\n");
   return;
- if(acc[1][accountNum-901]==1)
- {
-     acc[0][accountNum-901]+=amount;
-    printf("the balance after deposit: %0.2lf\n", acc[0][accountNum-901]);
- }
- else
- printf("this account is close\n"); 
+}
+    acc[0][account-901]+=amount;
+    printf("The new balance is: %0.2lf\n", acc[0][account-901]);
+ 
 }
 
 void withdraw()
 {
- int accountNum=getAccountNum();
- double amount=getAmount();
- if(amount<0)
- {
-  printf("invalid number \n");
+ int account;
+printf("Please enter account number: ");
+if((scanf(" %d", &account))==0)
+   {
+     printf("Failed to read the account number\n");
+     return;
+   }
+if (account<901 ||account>950)
+{
+  printf("invalid acount number \n");
   return;
+}
+if(acc[1][account-901]==0)
+ {
+    printf("This account is closed\n"); 
+    return;
  }
- if(accountNum<0)
+
+ double amount;
+printf("Please enter the amount to withdraw: ");
+if((scanf(" %lf", &amount)==0))
+   {
+     printf("Failed to read the amount\n");
+     return;
+   }
+if(amount<0)
+{
+  printf("Cannot withdraw a negative amount\n");
   return;
- if(acc[1][accountNum-901]==1)
- {
-    if((acc[0][accountNum-901]-amount)<0)
-        printf("you can't withdraw more than you have\n");
+}
+ 
+    if((acc[0][account-901]-amount)<0)
+        printf("Cannot withdraw more than the balance\n");
     else
     {
-    acc[0][accountNum-901]-=amount;
-    printf("the balance after withdraw: %0.2lf\n", acc[0][accountNum-901]);
+    acc[0][account-901]-=amount;
+    printf("the balance after withdraw: %0.2lf\n", acc[0][account-901]);
     }
- }
- else
-  printf("this account is close\n"); 
+
 }
 
 void closeAccount()
 {
-int accountNum=getAccountNum();
-if(accountNum<0)
+int account;
+printf("Please enter account number: ");
+if((scanf(" %d", &account))==0)
+   {
+     printf("Failed to read the account number\n");
+     return;
+   }
+if (account<901 ||account>950)
+{
+  printf("invalid acount number \n");
   return;
- if(acc[1][accountNum-901]==1)
- {
-    acc[1][accountNum-901]=0;
-    acc[0][accountNum-901]=0;
-    printf("this account has been closed as you wish\n");
+}
+ if(acc[1][account-901]==0)
+ { 
+   printf("This account is already closed\n"); 
+   return;
  }
- else
- printf("this account is already close\n"); 
+ 
+    acc[1][account-901]=0;
+    acc[0][account-901]=0;
+    printf("Closed account number %d\n", account);
+ 
+ 
 }
 
 void addInterest()
 {
-double rate;
-printf("enter amount \n");
-if((scanf(" %lf", &rate)==0))
- return;
-for(int i=0; i<size; i++)
- {
-  if(acc[1][i]==1)
-  {
-    acc[0][i]*=(1+rate/100.0);
-  }
+  int rate;
+  printf("Please enter interest rate: ");
+  if((scanf(" %d", &rate))==0)
+    {
+      printf("Failed to read the interest rate\n");
+      return;
+    }
+  if(rate<0)
+    {
+      printf("Invalid interest rate\n");
+      return;
+    }
+  for(int i=0; i<size; i++)
+    {
+      if(acc[1][i]==1)
+        acc[0][i]*=(1+rate/100.0);
+    }
  }
-}
 
 void printAccount()
 {
-int count=0;
 for(int i=0; i<size; i++)
 {
   if(acc[1][i]==1)
   {
-    count++;
-     printf("account number: %d \n", 901+i);
-     printf("balance: %0.2lf \n", acc[0][i]);   
-     printf("--------\n");
+     printf("\nThe balance of account number %d is: %0.2lf\n",901+i,acc[0][i]);
   }
 }
-if(count==0)
- printf("there is no open accounts\n");
 }
 
 void closeAccounts()

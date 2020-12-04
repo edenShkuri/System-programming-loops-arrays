@@ -4,9 +4,10 @@
   { 
     char T;
     do{
-        printf("\n ***MANU*** \n\n O-Open Account\n B-Balance Inquiry\n D-Deposit\n W-Withdrawal\n C-Close Account\n I-Interest\n P-Print\n E-Exit\n");
-        printf("\ntype Transaction?: \n");
+        printf("\nPlease choose a transaction type:");
+        printf("\n O-Open Account\n B-Balance Inquiry\n D-Deposit\n W-Withdrawal\n C-Close Account\n I-Interest\n P-Print\n E-Exit\n");
         scanf(" %c", &T);
+        printf("the T: %c\n", T);
           switch (T)
           {  
             case 'O':
@@ -42,7 +43,7 @@
             break;
 
             default:
-            printf("this transaction is not valid\n");
+            printf("Invalid transaction type\n");
           }
       }
     while(T!='E');

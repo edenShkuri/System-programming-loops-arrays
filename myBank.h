@@ -6,5 +6,3 @@ void closeAccount();
 void addInterest();
 void printAccount();
 void closeAccounts();
-double getAmount();
-int getAccountNum();
